@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  axion:
+    build: .
+    container_name: axion-bot
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/axion
+      REDIS_URL: redis://redis:6379
+
+  mongodb:
+    image: mongo:7
+    container_name: axion-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017/axion --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: axion-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  mongodb_data:
+  redis_data:

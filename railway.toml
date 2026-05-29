@@ -1,0 +1,62 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+restartPolicyType = "ALWAYS"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+
+[deploy.worker]
+watchDirectories = ["src", "workers"]
+
+[service]
+ports = [{ port = 3000, protocol = "TCP" }]
+
+[[service.variables]]
+name = "DISCORD_TOKEN"
+value = ""
+
+[[service.variables]]
+name = "CLIENT_ID"
+value = ""
+
+[[service.variables]]
+name = "OWNER_ID"
+value = "1229349314736951321"
+
+[[service.variables]]
+name = "MONGODB_URI"
+value = ""
+
+[[service.variables]]
+name = "REDIS_URL"
+value = ""
+
+[[service.variables]]
+name = "GEMINI_API_KEY"
+value = ""
+
+[[service.variables]]
+name = "LAVALINK_HOST"
+value = ""
+
+[[service.variables]]
+name = "LAVALINK_PORT"
+value = "2333"
+
+[[service.variables]]
+name = "LAVALINK_PASSWORD"
+value = ""
+
+[[service.variables]]
+name = "LAVALINK_SECURE"
+value = "false"
+
+[[service.variables]]
+name = "SPOTIFY_CLIENT_ID"
+value = ""
+
+[[service.variables]]
+name = "SPOTIFY_CLIENT_SECRET"
+value = ""
