@@ -16,7 +16,7 @@ RUN apk add --no-cache \
         fontconfig-dev \
         pkgconfig \
         && rm -rf /var/cache/apk/* \
-    && if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
+    && npm install
 
 COPY tsconfig.json ./
 COPY src/ ./src/
@@ -41,11 +41,12 @@ RUN apk add --no-cache \
 
 ENV NODE_ENV=production
 
+COPY package*.json ./
+RUN npm install --omit=dev
+
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package.json ./
 
 RUN addgroup -S axion && adduser -S axion -G axion
 USER axion
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/src/index.js"]
