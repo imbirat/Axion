@@ -41,9 +41,7 @@ RUN apk add --no-cache \
 
 ENV NODE_ENV=production
 
-COPY package*.json ./
-RUN npm install --omit=dev
-
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
 RUN addgroup -S axion && adduser -S axion -G axion
