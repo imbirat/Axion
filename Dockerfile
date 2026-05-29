@@ -3,7 +3,20 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
+RUN apk add --no-cache \
+        python3 \
+        build-base \
+        cairo-dev \
+        pango-dev \
+        libjpeg-turbo-dev \
+        libpng-dev \
+        giflib-dev \
+        libwebp-dev \
+        freetype-dev \
+        fontconfig-dev \
+        pkgconfig \
+        && rm -rf /var/cache/apk/* \
+    && if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
 
 COPY tsconfig.json ./
 COPY src/ ./src/
